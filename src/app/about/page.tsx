@@ -181,9 +181,9 @@ const About = () => {
 
                         I did a one-month internship in penetration testing with a cybersecurity firm in India. I have also talked with cybersecurity experts in my area to improve my knowledge and skills.
                         <br /><br />
-                        I currently reside and work remotely from Port Harcourt, Rivers state but I am open to relocating to Lagos state for the sake of the job (all expenses on me).
+                        I currently reside and work remotely from Port Harcourt, Rivers state.
                         <br /><br />
-                        Attached is my resume for your perusal and consideration.
+                        Attached is my resume for your perusal.
                         <br />
                         <a
                             href="/mycv.pdf"
