@@ -1,11 +1,10 @@
 "use client";
 import "@/app/style.css";
-// import Image from 'next/image';
-import primeCoverBackground from '@/public/assets/images/prime-cover.png';
-import profilePhoto from '@/public/assets/images/ThePrimotionStudio.png';
+import { Mail, MessageSquare, Linkedin, Github, Twitter, Facebook, Instagram } from 'lucide-react';
 import React, { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Modal } from '@/components/layout/modal';
+import Link from 'next/link';
 
 
 const About = () => {
@@ -168,53 +167,79 @@ const About = () => {
                     </p>
                 </div>
             </div>
-            <div className="w-full md:w-3/5 flex flex-col bg-white items-center rounded-t-3xl md:rounded-t-none absolute md:relative bottom-0 md:top-0 h-4/5 md:h-full text-gray-900">
-                <div className="mt-20 md:mt-24 mx-5 overflow-y-scroll flex-1">
-                    <p className='text-gray-950'>
-                        I am a very creative fullstack developer with 6 year experience in many programming paradigms and a recent graduate of Computer Science in Rivers State University and of Software Engineering at ALX Africa.
-                        <br /><br />
-                        I have Typescript and PHP as my forte for building Backend web services and I am flexible to whichever framework my team prefers to work with. However, I do have a personal preference which is Next.js because of its ease of integration with both frontend and backend.
-                        <br /><br />
-                        I am also skilled in many other languages and Frameworks like Python, Rust, React Native, and Tauri among others for applications in other sectors like Backend and Automated scripts.
-                        <br /><br />
-                        I use Linux every day, and it is my main operating system. I am quite familiar with terminal-based interfaces. This use has also helped me learn about web server setup, using tools like SSH, Nginx, Apache, and HAProxy. I also have a good base in cybersecurity.
+            <div className="w-full md:w-3/5 flex flex-col bg-white justify-center items-center rounded-t-3xl md:rounded-t-none absolute md:relative bottom-0 md:top-0 h-4/5 md:h-full text-gray-900">
+                <div className="max-w-2xl mx-auto p-6 space-y-6">
+                    <h2 className="text-2xl font-bold mb-6">I would love to talk with you!</h2>
 
-                        I did a one-month internship in penetration testing with a cybersecurity firm in India. I have also talked with cybersecurity experts in my area to improve my knowledge and skills.
-                        <br /><br />
-                        I currently reside and work remotely from Port Harcourt, Rivers state but I am open to relocating to Lagos state for the sake of the job (all expenses on me).
-                        <br /><br />
-                        Attached is my resume for your perusal and consideration.
-                        <br />
-                        <a
-                            href="/mycv.pdf"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            download="Martins Okanlawon CV.pdf"
-                            className="text-blue-500 underline"
+                    <div className="space-y-4">
+                        <div className="flex items-center gap-3">
+                            <Mail className="w-5 h-5" />
+                            <span>I prefer you reach out by email at </span>
+                            <Link
+                                href="mailto:oyedelenewton@gmail.com"
+                                className="text-secondary hover:underline"
+                            >
+                                oyedelenewton@gmail.com
+                            </Link>
+                        </div>
 
-                        >
-                            Download My Resume
-                        </a>
-                        <br /><br />
+                        <div className="flex items-center gap-3">
+                            <Linkedin className="w-5 h-5" />
+                            <span>Alternatively, feel free to connect with me on </span>
+                            <Link
+                                href="https://linkedin.com/in/theprimotionstudio"
+                                className="text-secondary hover:underline"
+                            >
+                                LinkedIn
+                            </Link>
+                        </div>
 
-                        Below are links to some of my live projects and professional profile:
-                        <br /><br />
-                        1. <a href="https://theprimotionstudio.vercel.app/" className="text-blue-500 underline" target="_blank" rel="noopener noreferrer">https://theprimotionstudio.vercel.app/</a>
-                        <br />
-                        2. <a href="https://theprimotionstudio.wordpress.com/" className="text-blue-500 underline" target="_blank" rel="noopener noreferrer">https://theprimotionstudio.wordpress.com/</a>
-                        <br />
-                        3. <a href="https://github.com/primotionstudio/" className="text-blue-500 underline" target="_blank" rel="noopener noreferrer">https://github.com/primotionstudio/</a>
-                        <br />
-                        4. <a href="https://linkedin.com/in/theprimotionstudio/" className="text-blue-500 underline" target="_blank" rel="noopener noreferrer">https://linkedin.com/in/theprimotionstudio/</a>
-                        <br /><br />
-                        I believe it would give you an understanding of my creativity levels and proficiency in various domains.
-                        <br /><br />
-                        Thank you for reading up to this point.
-                        <br /><br />
-                        Good day and have a Happy New Year 😁<br />
-                        Sincerely,<br />
-                        Martins Okanlawon
-                    </p>
+                        <div className="flex items-center gap-3">
+                            <Github className="w-5 h-5" />
+                            <span>For a more technical portfolio, visit my </span>
+                            <Link
+                                href="https://github.com/primotionstudio"
+                                className="text-secondary hover:underline"
+                            >
+                                GitHub
+                            </Link>
+                        </div>
+
+                        <div className="flex items-center gap-3 flex-wrap">
+                            <div className="flex items-center gap-2">
+                                <span>You can also follow me on </span>
+                                {/* <Twitter className="w-5 h-5" /> */}
+                                <i className="w-5 h-5 font-black align-text-bottom text-xl">𝕏</i>
+                                <Link
+                                    href="https://twitter.com/theprimotion"
+                                    className="text-secondary hover:underline"
+                                >
+                                    Twitter
+                                </Link>
+                            </div>
+                            <span>or add me on </span>
+                            <div className="flex items-center gap-2">
+                                <Facebook className="w-5 h-5" />
+                                <Link
+                                    href="https://facebook.com/theprimotionstudio"
+                                    className="text-secondary hover:underline"
+                                >
+                                    Facebook
+                                </Link>,
+                            </div>
+                            <span>or add me on </span>
+                            <div className="flex items-center gap-2">
+                                <Instagram className="w-5 h-5" />
+                                <Link
+                                    href="https://instagram.com/theprimotionstudio"
+                                    className="text-secondary hover:underline"
+                                >
+                                    Instagram
+                                </Link>,
+                            </div>
+                            <span> although I am not really active on social media.</span>
+                        </div>
+                    </div>
                 </div>
             </div>
             {help && (<Modal setShowHelp={setHelp} />)}

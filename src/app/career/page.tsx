@@ -1,14 +1,16 @@
 "use client";
 import "@/app/style.css";
-// import Image from 'next/image';
 import primeCoverBackground from '@/public/assets/images/prime-cover.png';
 import profilePhoto from '@/public/assets/images/ThePrimotionStudio.png';
 import React, { useEffect, useRef, useState } from 'react';
+import { Card, CardContent } from "@/components/ui/card";
+import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from 'next/navigation';
 import { Modal } from '@/components/layout/modal';
 
 
-const About = () => {
+const Career = () => {
     const router = useRouter();
     const inputRef = useRef<HTMLInputElement>(null);
     const [currentDate, setCurrentDate] = useState<string | null>(null);
@@ -49,6 +51,36 @@ const About = () => {
         return `Time on site: ${hrs.toString().padStart(2, "0")}:${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
     };
 
+    const experiences = [
+        {
+            company: "Finaseed Ltd",
+            role: "Backend Developer (Intern)",
+            period: "August 2023 to January 2024",
+            description: "Designed and implemented a robust backend system for real-time monetary transactions, ensuring the secure storage of critical data through a well-structured database and seamless API integration with the frontend team. I also oversaw the security of the backend system to prevent vulnerabilities and breaches.",
+            logo: "/placeholder.svg?height=40&width=40"
+        },
+        {
+            company: "Shef",
+            role: "Software Engineer",
+            period: "April 2021 to July 2022",
+            description: "Developed the consumer web experience, chef onboarding and supply platform, and internal administrator tooling.",
+            logo: "/placeholder.svg?height=40&width=40"
+        },
+        {
+            company: "Koala",
+            role: "Lead Engineer",
+            period: "September 2019 to March 2021",
+            description: "Worked on a 3D collaborative classroom application for independent tutors. Launched parent, tutor, and administrator web platforms for Oculus VR Spanish and reading tutoring service. Led primary Unity and Electron products supported on Mac, Windows, and WebGL.",
+            logo: "/placeholder.svg?height=40&width=40"
+        },
+        {
+            company: "Holberton School",
+            role: "Software Engineering Student",
+            period: "September 2018 to June 2019",
+            description: "Completed the nine-month computer science, programming and full-stack web development curriculum.",
+            logo: "/placeholder.svg?height=40&width=40"
+        }
+    ];
 
     const linuxCommands = [
         "ls",
@@ -169,52 +201,43 @@ const About = () => {
                 </div>
             </div>
             <div className="w-full md:w-3/5 flex flex-col bg-white items-center rounded-t-3xl md:rounded-t-none absolute md:relative bottom-0 md:top-0 h-4/5 md:h-full text-gray-900">
-                <div className="mt-20 md:mt-24 mx-5 overflow-y-scroll flex-1">
-                    <p className='text-gray-950'>
-                        I am a very creative fullstack developer with 6 year experience in many programming paradigms and a recent graduate of Computer Science in Rivers State University and of Software Engineering at ALX Africa.
-                        <br /><br />
-                        I have Typescript and PHP as my forte for building Backend web services and I am flexible to whichever framework my team prefers to work with. However, I do have a personal preference which is Next.js because of its ease of integration with both frontend and backend.
-                        <br /><br />
-                        I am also skilled in many other languages and Frameworks like Python, Rust, React Native, and Tauri among others for applications in other sectors like Backend and Automated scripts.
-                        <br /><br />
-                        I use Linux every day, and it is my main operating system. I am quite familiar with terminal-based interfaces. This use has also helped me learn about web server setup, using tools like SSH, Nginx, Apache, and HAProxy. I also have a good base in cybersecurity.
-
-                        I did a one-month internship in penetration testing with a cybersecurity firm in India. I have also talked with cybersecurity experts in my area to improve my knowledge and skills.
-                        <br /><br />
-                        I currently reside and work remotely from Port Harcourt, Rivers state but I am open to relocating to Lagos state for the sake of the job (all expenses on me).
-                        <br /><br />
-                        Attached is my resume for your perusal and consideration.
-                        <br />
-                        <a
-                            href="/mycv.pdf"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            download="Martins Okanlawon CV.pdf"
-                            className="text-blue-500 underline"
-
-                        >
-                            Download My Resume
-                        </a>
-                        <br /><br />
-
-                        Below are links to some of my live projects and professional profile:
-                        <br /><br />
-                        1. <a href="https://theprimotionstudio.vercel.app/" className="text-blue-500 underline" target="_blank" rel="noopener noreferrer">https://theprimotionstudio.vercel.app/</a>
-                        <br />
-                        2. <a href="https://theprimotionstudio.wordpress.com/" className="text-blue-500 underline" target="_blank" rel="noopener noreferrer">https://theprimotionstudio.wordpress.com/</a>
-                        <br />
-                        3. <a href="https://github.com/primotionstudio/" className="text-blue-500 underline" target="_blank" rel="noopener noreferrer">https://github.com/primotionstudio/</a>
-                        <br />
-                        4. <a href="https://linkedin.com/in/theprimotionstudio/" className="text-blue-500 underline" target="_blank" rel="noopener noreferrer">https://linkedin.com/in/theprimotionstudio/</a>
-                        <br /><br />
-                        I believe it would give you an understanding of my creativity levels and proficiency in various domains.
-                        <br /><br />
-                        Thank you for reading up to this point.
-                        <br /><br />
-                        Good day and have a Happy New Year 😁<br />
-                        Sincerely,<br />
-                        Martins Okanlawon
-                    </p>
+                <div className="max-w-3xl mx-auto pt-5">
+                    <h1 className="text-3xl font-bold text-gray-900 mb-8">Career History</h1>
+                    <div className="space-y-6">
+                        {experiences.map((experience, index) => (
+                            <Card key={index} className="border-l-4 border-secondary bg-gray-100">
+                                <CardContent className="pt-6">
+                                    <div className="flex items-start gap-4">
+                                        <div className="flex-shrink-0">
+                                            <Image
+                                                src={experience.logo}
+                                                alt={`${experience.company} logo`}
+                                                width={40}
+                                                height={40}
+                                                className="rounded-lg"
+                                            />
+                                        </div>
+                                        <div className="flex-1 min-w-0">
+                                            <div className="flex items-center justify-between">
+                                                <h2 className="text-xl font-semibold text-gray-900">
+                                                    {experience.company}
+                                                </h2>
+                                                <span className="text-sm text-gray-500">
+                                                    {experience.period}
+                                                </span>
+                                            </div>
+                                            <h3 className="text-md font-medium text-gray-700 mt-1">
+                                                {experience.role}
+                                            </h3>
+                                            <p className="mt-2 text-gray-600">
+                                                {experience.description}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </CardContent>
+                            </Card>
+                        ))}
+                    </div>
                 </div>
             </div>
             {help && (<Modal setShowHelp={setHelp} />)}
@@ -222,4 +245,4 @@ const About = () => {
     );
 };
 
-export default About;
+export default Career;

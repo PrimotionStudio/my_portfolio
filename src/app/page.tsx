@@ -177,9 +177,10 @@ const Home = () => {
               style={{
                 backgroundImage: `url('${profilePhoto.src}')`,
                 backgroundSize: 'cover',
+                backgroundPosition: 'center bottom',
               }}
               className='
-              flex-none
+                flex-none
                 translate-y-40
                 md:translate-y-48
                 ml-5
