@@ -1,235 +1,105 @@
 "use client";
-import "@/app/style.css";
-// import Image from 'next/image';
-import primeCoverBackground from '@/public/assets/images/prime-cover.png';
-import profilePhoto from '@/public/assets/images/ThePrimotionStudio.png';
-import React, { useEffect, useRef, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { Modal } from '@/components/layout/modal';
 
+import React from 'react';
+import { MonolithLayout } from '@/components/layout/monolith-layout';
 
-const Home = () => {
-  const router = useRouter();
-  const inputRef = useRef<HTMLInputElement>(null);
-  const [currentDate, setCurrentDate] = useState<string | null>(null);
-  const [timeOnSite, setTimeOnSite] = useState(0);
-  const [command, setCommand] = useState("");
-  const [username, setUsername] = useState("anonymous");
-  const [help, setHelp] = useState(false);
-
-  const handleDivClick = () => {
-    if (inputRef.current) {
-      inputRef.current.focus();
-    }
-  };
-  useEffect(() => {
-    const user = localStorage.getItem('terminalPortfolioProfile');
-    if (user) {
-      setUsername(user);
-    }
-    const savedTime = sessionStorage.getItem('timeOnSite');
-    if (savedTime) {
-      setTimeOnSite(parseInt(savedTime)); // Load the saved time
-    }
-    const timer = setInterval(() => {
-      setCurrentDate(new Date().toString());
-
-      setTimeOnSite((prevTime) => {
-        const updatedTime = prevTime + 1;
-        sessionStorage.setItem('timeOnSite', updatedTime.toString());
-        return updatedTime;
-      });
-    }, 1000);
-    return () => clearInterval(timer);
-  }, []);
-  const formatTime = (seconds: number) => {
-    const hrs = Math.floor(seconds / 3600);
-    const mins = Math.floor((seconds % 3600) / 60);
-    const secs = seconds % 60;
-    return `Time on site: ${hrs.toString().padStart(2, "0")}:${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
-  };
-
-
-  const linuxCommands = [
-    "ls",
-    "cd",
-    "pwd",
-    "mkdir",
-    "rmdir",
-    "touch",
-    "rm",
-    "cp",
-    "mv",
-    "chmod",
-    "chown",
-    "grep",
-    "cat",
-    "head",
-    "tail",
-    "chmod",
-    "ssh",
-    "sudo",
-  ];
-
-  const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>): void => {
-    if (event.key === "Enter") {
-      const cmd = command.toLowerCase().trim();
-      setCommand("");
-      switch (cmd) {
-        case 'login':
-          let name = prompt("What is your name?");
-          name = name ? name.toLowerCase().replace(/\s/g, "") : '';
-          localStorage.setItem("terminalPortfolioProfile", name);
-          setUsername(name);
-          break;
-
-        case 'logout':
-          localStorage.removeItem("terminalPortfolioProfile");
-          setUsername("anonymous");
-          break;
-
-        case '?':
-        case 'help':
-          setHelp(true);
-          break;
-
-        case 'home':
-          router.push('/home');
-          break;
-
-        case 'about':
-          router.push('/about');
-          break;
-
-        case 'career':
-          router.push('/career');
-          break;
-
-        case 'contact':
-          router.push('/contact');
-          break;
-
-        default:
-          alert("I don't know that command");
-          break;
-      }
-      if (linuxCommands.includes(cmd)) {
-        alert("Ahahaha, I can't be hacked!");
-      }
-    };
-  };
-
+export default function Home() {
   return (
-    <div className="flex h-screen flex-col md:flex-row">
-      <div className="terminal w-full md:w-2/5 flex flex-col justify-start items-start gap-y-1 p-3 font-xs md:font-md">
-        <p>Martins Okanlawon - Portfolio Terminal</p>
-        <div className='hidden md:block'>
-
-          <p>Alias: Prime, The Primotion Studio</p>
-          <p>Version 2.3.4</p>
-          <p>Date: <span id="current_date">{currentDate ? currentDate : "Loading..."}</span></p>
-          <p>This is the virtual portfolio console of Prime.</p>
-          <br />
-          <p>Type 'login' to login a personalized console.</p>
-          <p>Type 'logout' to opt out of your personalized console.</p>
-          <br />
-          <p>1) <em>home</em> - A little bit about myself</p>
-          <p>2) <em>about</em> - A little more-bit about myself</p>
-          <p>3) <em>career</em> - My skills, projects, careers & experiences</p>
-          <p>4) <em>contact</em> - You wanna hire me? Contact Me!!! (Yippie&#x1F643; !)</p>
+    <MonolithLayout>
+      <section className="max-w-5xl mx-auto space-y-12">
+        <div className="space-y-2">
+          <p className="font-mono text-[10px] text-outline uppercase tracking-[0.2em]">BUILD_VER: 1.0.4 // SESSION_ID: 0x8F2A</p>
+          <h1 className="font-headline text-5xl md:text-7xl font-bold tracking-tighter text-primary uppercase">SYSTEM_ARCHITECT</h1>
         </div>
 
-        <p id="counter">{formatTime(timeOnSite)}</p>
-        <div
-          className="command-box flex-1 w-full"
-          onClick={handleDivClick}>
-          <p className='flex'>┌──(
-            <em>
-              <span id="user">{username}</span>@theprimotionstudio
-            </em>
-            )<span className='hidden md:block'>-[~/
-              <span id="directory">home</span>
-              ]
-            </span>
-          </p>
-          <p>
-            └─$&nbsp;
-            <input
-              type="text"
-              id="command"
-              className="command bg-inherit focus:border-none focus:outline-none w-10/12"
-              name="command"
-              value={command}
-              onChange={(e) => setCommand(e.target.value)}
-              onKeyDown={handleKeyPress}
-              placeholder='Type `help` or `?` for help'
-              ref={inputRef}
-            />
-          </p>
-        </div>
-      </div>
-      <div className="w-full md:w-3/5 flex flex-col bg-white items-center rounded-t-3xl md:rounded-t-none absolute md:relative bottom-0 md:top-0 h-4/5 md:h-full text-gray-900">
-        <div className="cover-photo h-48 md:h-64 rounded-t-3xl" style={{
-          backgroundImage: `url('${primeCoverBackground.src}')`,
-        }}>
-          <div className="profile flex items-end">
-            <div
-              style={{
-                backgroundImage: `url('${profilePhoto.src}')`,
-                backgroundSize: 'cover',
-                backgroundPosition: 'center bottom',
-              }}
-              className='
-                flex-none
-                translate-y-40
-                md:translate-y-48
-                ml-5
-                md:ml-10
-                rounded-full
-                md:h-36
-                md:w-36
-                h-24
-                w-24
-                shadow-md
-                '
-            >
+        {/* Terminal Interface */}
+        <div className="bg-surface-container-low rounded-lg overflow-hidden border border-outline-variant/20 shadow-2xl">
+          {/* Terminal Header */}
+          <div className="bg-surface-container-high px-4 py-2 flex justify-between items-center">
+            <div className="flex gap-1.5">
+              <div className="w-2.5 h-2.5 rounded-full bg-error/40"></div>
+              <div className="w-2.5 h-2.5 rounded-full bg-tertiary/40"></div>
+              <div className="w-2.5 h-2.5 rounded-full bg-secondary/40"></div>
             </div>
-            <div className="title flex-1
-                md:ml-5
-                ml-3
-                translate-y-40
-            ">
-              <h1>Martins Okanlawon</h1>
-              <p className="job-title">
-                Software Engineer | Ethical Hacker (Pentester)
+            <span className="font-mono text-[10px] text-outline">guest@monolith-os: ~</span>
+          </div>
+          {/* Terminal Content */}
+          <div className="p-6 font-mono text-sm md:text-base space-y-4 leading-relaxed">
+            <div className="flex gap-3">
+              <span className="text-secondary">guest@primotionstudio:~$</span>
+              <span className="text-on-surface">whoami</span>
+            </div>
+            <div className="text-on-surface-variant space-y-2">
+              <p className="text-primary font-bold">NAME: MARTINS_OKANLAWON</p>
+              <p>ROLE: FULL_STACK_ENGINEER // ETHICAL_HACKER</p>
+              <p>STACK: <span className="text-tertiary">Next.js</span>, <span className="text-tertiary">PHP</span>, <span className="text-tertiary">Python</span>, <span className="text-tertiary">PostgreSQL</span></p>
+              <p className="opacity-80">
+                Highly motivated and versatile programmer with over 5 years of experience in full-stack development.
+                Proficient in PHP, JavaScript/Typescript, C, Python, and various scripting languages.
+                Aiming to create solutions, learn from every mistake, and look at the bigger picture in every situation.
               </p>
+            </div>
+            <div className="pt-6">
+              <p className="text-outline text-xs mb-4 uppercase tracking-widest">Available Commands:</p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div className="group cursor-pointer hover:bg-surface-container-highest p-3 transition-colors border-b border-transparent hover:border-secondary">
+                  <span className="text-secondary block mb-1">ls projects</span>
+                  <span className="text-xs text-outline italic">View architecture portfolio</span>
+                </div>
+                <div className="group cursor-pointer hover:bg-surface-container-highest p-3 transition-colors border-b border-transparent hover:border-secondary">
+                  <span className="text-secondary block mb-1">cd experience</span>
+                  <span className="text-xs text-outline italic">Professional history</span>
+                </div>
+                <div className="group cursor-pointer hover:bg-surface-container-highest p-3 transition-colors border-b border-transparent hover:border-secondary">
+                  <span className="text-secondary block mb-1">cat contact.txt</span>
+                  <span className="text-xs text-outline italic">Initialize communication</span>
+                </div>
+                <div className="group cursor-pointer hover:bg-surface-container-highest p-3 transition-colors border-b border-transparent hover:border-secondary">
+                  <span className="text-secondary block mb-1">./blog --latest</span>
+                  <span className="text-xs text-outline italic">Technical insights</span>
+                </div>
+              </div>
+            </div>
+            <div className="flex gap-3 pt-4">
+              <span className="text-secondary">guest@primotionstudio:~$</span>
+              <span className="w-2.5 h-5 bg-primary cursor-blink"></span>
             </div>
           </div>
         </div>
-        <div className="mt-20 md:mt-24 mx-5 overflow-y-scroll flex-1
-         [&::-webkit-scrollbar]:w-2
-  [&::-webkit-scrollbar-track]:rounded-full
-  [&::-webkit-scrollbar-track]:bg-gray-100
-  [&::-webkit-scrollbar-thumb]:rounded-full
-  [&::-webkit-scrollbar-thumb]:bg-gray-300
-  dark:[&::-webkit-scrollbar-track]:bg-neutral-700
-  dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500
-        ">
-          <p className='text-gray-950'>
-            I am a highly motivated and versatile programmer with over 5 years of
-            experience in full-stack development technologies, seeking a software
-            engineering career. I am proficient in PHP, JavaScript/Typescript, C, Python,
-            and various scripting languages. I also possess strong database management
-            skills. In all my endeavors, I aim to create solutions as often as possible, learn
-            from every mistake I encounter and look at the bigger picture in every situation
-            from every angle. I also look forward to bringing all my expertise and more to
-            the team as well as learning from them
-          </p>
-        </div>
-      </div>
-      {help && (<Modal setShowHelp={setHelp} />)}
-    </div >
-  );
-};
 
-export default Home;
+        {/* Bento Stats / Features */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="md:col-span-2 bg-surface-container-lowest p-8 border border-outline-variant/10 group hover:border-primary/30 transition-all">
+            <span className="font-mono text-[10px] text-tertiary uppercase tracking-widest mb-4 block">ACTIVE_PROJECT_STREAK</span>
+            <div className="flex items-end gap-1 h-32">
+              <div className="w-full bg-primary/20 h-[40%] group-hover:h-[60%] transition-all"></div>
+              <div className="w-full bg-primary/20 h-[70%] group-hover:h-[80%] transition-all"></div>
+              <div className="w-full bg-primary/20 h-[30%] group-hover:h-[50%] transition-all"></div>
+              <div className="w-full bg-primary/20 h-[90%] group-hover:h-[100%] transition-all"></div>
+              <div className="w-full bg-primary/20 h-[50%] group-hover:h-[70%] transition-all"></div>
+              <div className="w-full bg-primary/20 h-[60%] group-hover:h-[90%] transition-all"></div>
+              <div className="w-full bg-primary/20 h-[85%] group-hover:h-[95%] transition-all"></div>
+              <div className="w-full bg-primary/10 h-[20%] group-hover:h-[40%] transition-all"></div>
+            </div>
+            <div className="mt-4 flex justify-between font-mono text-[10px] text-outline">
+              <span>Q1_2024</span>
+              <span>STATUS: COMMITTING...</span>
+              <span>Q4_2024</span>
+            </div>
+          </div>
+          <div className="bg-primary-container p-8 text-on-primary-container relative overflow-hidden group">
+            <div className="relative z-10">
+              <span className="font-mono text-[10px] uppercase tracking-widest mb-2 block opacity-70">CURRENT_STATUS</span>
+              <h3 className="font-headline text-2xl font-bold leading-tight uppercase">Open for Collaboration</h3>
+              <p className="mt-4 text-sm opacity-80 font-medium">Seeking high-impact backend roles or complex full-stack contracts.</p>
+              <button className="mt-8 px-4 py-2 bg-on-primary-container text-white text-xs font-mono uppercase tracking-widest hover:opacity-90 transition-opacity">SEND_SIGNAL</button>
+            </div>
+            <div className="absolute -right-4 -bottom-4 opacity-10">
+              <span className="material-symbols-outlined text-9xl">terminal</span>
+            </div>
+          </div>
+        </div>
+      </section>
+    </MonolithLayout>
+  );
+}

@@ -1,250 +1,156 @@
 "use client";
-import "@/app/style.css";
-import { Mail, MessageSquare, Linkedin, Github, Twitter, Facebook, Instagram } from 'lucide-react';
-import React, { useEffect, useRef, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { Modal } from '@/components/layout/modal';
+
+import React from 'react';
+import { MonolithLayout } from '@/components/layout/monolith-layout';
 import Link from 'next/link';
 
+export default function Contact() {
+  return (
+    <MonolithLayout>
+      <div className="max-w-4xl w-full grid grid-cols-1 lg:grid-cols-12 gap-8">
+        {/* Terminal Section */}
+        <section className="lg:col-span-8 flex flex-col gap-6">
+          <div className="flex flex-col gap-2">
+            <span className="font-mono text-[10px] text-tertiary uppercase tracking-[0.2em]">BUILD_VER: 1.0.4 // MODULE: CONTACT_CONSOLE</span>
+            <h1 className="font-headline text-5xl font-bold tracking-tighter text-primary uppercase">Initialize<br/>Transmission</h1>
+          </div>
 
-const About = () => {
-    const router = useRouter();
-    const inputRef = useRef<HTMLInputElement>(null);
-    const [currentDate, setCurrentDate] = useState<string | null>(null);
-    const [timeOnSite, setTimeOnSite] = useState(0);
-    const [command, setCommand] = useState("");
-    const [username, setUsername] = useState("anonymous");
-    const [help, setHelp] = useState(false);
-
-    const handleDivClick = () => {
-        if (inputRef.current) {
-            inputRef.current.focus();
-        }
-    };
-    useEffect(() => {
-        const user = localStorage.getItem('terminalPortfolioProfile');
-        if (user) {
-            setUsername(user);
-        }
-        const savedTime = sessionStorage.getItem('timeOnSite');
-        if (savedTime) {
-            setTimeOnSite(parseInt(savedTime)); // Load the saved time
-        }
-        const timer = setInterval(() => {
-            setCurrentDate(new Date().toString());
-
-            setTimeOnSite((prevTime) => {
-                const updatedTime = prevTime + 1;
-                sessionStorage.setItem('timeOnSite', updatedTime.toString());
-                return updatedTime;
-            });
-        }, 1000);
-        return () => clearInterval(timer);
-    }, []);
-    const formatTime = (seconds: number) => {
-        const hrs = Math.floor(seconds / 3600);
-        const mins = Math.floor((seconds % 3600) / 60);
-        const secs = seconds % 60;
-        return `Time on site: ${hrs.toString().padStart(2, "0")}:${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
-    };
-
-
-    const linuxCommands = [
-        "ls",
-        "cd",
-        "pwd",
-        "mkdir",
-        "rmdir",
-        "touch",
-        "rm",
-        "cp",
-        "mv",
-        "chmod",
-        "chown",
-        "grep",
-        "cat",
-        "head",
-        "tail",
-        "chmod",
-        "ssh",
-        "sudo",
-    ];
-
-    const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>): void => {
-        if (event.key === "Enter") {
-            const cmd = command.toLowerCase().trim();
-            setCommand("");
-            switch (cmd) {
-                case 'login':
-                    let name = prompt("What is your name?");
-                    name = name ? name.toLowerCase().replace(/\s/g, "") : '';
-                    localStorage.setItem("terminalPortfolioProfile", name);
-                    setUsername(name);
-                    break;
-
-                case 'logout':
-                    localStorage.removeItem("terminalPortfolioProfile");
-                    setUsername("anonymous");
-                    break;
-
-                case '?':
-                case 'help':
-                    setHelp(true);
-                    break;
-
-                case 'home':
-                    router.push('/home');
-                    break;
-
-                case 'about':
-                    router.push('/about');
-                    break;
-
-                case 'career':
-                    router.push('/career');
-                    break;
-
-                case 'contact':
-                    router.push('/contact');
-                    break;
-
-                default:
-                    alert("I don't know that command");
-                    break;
-            }
-            if (linuxCommands.includes(cmd)) {
-                alert("Ahahaha, I can't be hacked!");
-            }
-        };
-    };
-
-    return (
-        <div className="flex h-screen flex-col md:flex-row">
-            <div className="w-full md:w-2/5 flex flex-col justify-start items-start gap-y-1 p-3 font-xs md:font-md">
-                <p>Martins Okanlawon - Portfolio Terminal</p>
-                <div className='hidden md:block'>
-
-                    <p>Alias: Prime, The Primotion Studio</p>
-                    <p>Version 2.3.4</p>
-                    <p>Date: <span id="current_date">{currentDate ? currentDate : "Loading..."}</span></p>
-                    <p>This is the virtual portfolio console of Prime.</p>
-                    <br />
-                    <p>Type 'login' to login a personalized console.</p>
-                    <p>Type 'logout' to opt out of your personalized console.</p>
-                    <br />
-                    <p>1) <em>home</em> - A little bit about myself</p>
-                    <p>2) <em>about</em> - A little more-bit about myself</p>
-                    <p>3) <em>career</em> - My skills, projects, careers & experiences</p>
-                    <p>4) <em>contact</em> - You wanna hire me? Contact Me!!! (Yippie&#x1F643; !)</p>
-                </div>
-
-                <p id="counter">{formatTime(timeOnSite)}</p>
-                <div
-                    className="command-box flex-1 w-full"
-                    onClick={handleDivClick}>
-                    <p className='flex'>┌──(
-                        <em>
-                            <span id="user">{username}</span>@theprimotionstudio
-                        </em>
-                        )<span className='hidden md:block'>-[~/
-                            <span id="directory">home</span>
-                            ]
-                        </span>
-                    </p>
-                    <p>
-                        └─$&nbsp;
-                        <input
-                            type="text"
-                            id="command"
-                            className="command bg-inherit focus:border-none focus:outline-none w-10/12"
-                            name="command"
-                            value={command}
-                            onChange={(e) => setCommand(e.target.value)}
-                            onKeyDown={handleKeyPress}
-                            placeholder='Type `help` or `?` for help'
-                            ref={inputRef}
-                        />
-                    </p>
-                </div>
+          {/* Console Window */}
+          <div className="bg-surface-container-low rounded-xl overflow-hidden border border-outline-variant/10 shadow-2xl">
+            {/* Window Controls */}
+            <div className="bg-surface-container-high px-4 py-2 flex items-center justify-between border-b border-outline-variant/10">
+              <div className="flex gap-1.5">
+                <div className="w-2.5 h-2.5 rounded-full bg-error/30"></div>
+                <div className="w-2.5 h-2.5 rounded-full bg-tertiary/30"></div>
+                <div className="w-2.5 h-2.5 rounded-full bg-secondary/30"></div>
+              </div>
+              <span className="font-mono text-[10px] text-outline">SESSION: US-EAST-1</span>
             </div>
-            <div className="w-full md:w-3/5 flex flex-col bg-white justify-center items-center rounded-t-3xl md:rounded-t-none absolute md:relative bottom-0 md:top-0 h-4/5 md:h-full text-gray-900">
-                <div className="max-w-2xl mx-auto p-6 space-y-6">
-                    <h2 className="text-2xl font-bold mb-6">I would love to talk with you!</h2>
-
-                    <div className="space-y-4">
-                        <div className="flex items-center gap-3">
-                            <Mail className="w-5 h-5" />
-                            <span>I prefer you reach out by email at </span>
-                            <Link
-                                href="mailto:oyedelenewton@gmail.com"
-                                className="text-secondary hover:underline"
-                            >
-                                oyedelenewton@gmail.com
-                            </Link>
-                        </div>
-
-                        <div className="flex items-center gap-3">
-                            <Linkedin className="w-5 h-5" />
-                            <span>Alternatively, feel free to connect with me on </span>
-                            <Link
-                                href="https://linkedin.com/in/theprimotionstudio"
-                                className="text-secondary hover:underline"
-                            >
-                                LinkedIn
-                            </Link>
-                        </div>
-
-                        <div className="flex items-center gap-3">
-                            <Github className="w-5 h-5" />
-                            <span>For a more technical portfolio, visit my </span>
-                            <Link
-                                href="https://github.com/primotionstudio"
-                                className="text-secondary hover:underline"
-                            >
-                                GitHub
-                            </Link>
-                        </div>
-
-                        <div className="flex items-center gap-3 flex-wrap">
-                            <div className="flex items-center gap-2">
-                                <span>You can also follow me on </span>
-                                {/* <Twitter className="w-5 h-5" /> */}
-                                <i className="w-5 h-5 font-black align-text-bottom text-xl">𝕏</i>
-                                <Link
-                                    href="https://twitter.com/theprimotion"
-                                    className="text-secondary hover:underline"
-                                >
-                                    Twitter
-                                </Link>
-                            </div>
-                            <span>or add me on </span>
-                            <div className="flex items-center gap-2">
-                                <Facebook className="w-5 h-5" />
-                                <Link
-                                    href="https://facebook.com/theprimotionstudio"
-                                    className="text-secondary hover:underline"
-                                >
-                                    Facebook
-                                </Link>,
-                            </div>
-                            <span>or add me on </span>
-                            <div className="flex items-center gap-2">
-                                <Instagram className="w-5 h-5" />
-                                <Link
-                                    href="https://instagram.com/theprimotionstudio"
-                                    className="text-secondary hover:underline"
-                                >
-                                    Instagram
-                                </Link>,
-                            </div>
-                            <span> although I am not really active on social media.</span>
-                        </div>
-                    </div>
+            {/* Console Body */}
+            <div className="p-6 font-mono text-sm md:text-base flex flex-col gap-4 min-h-[400px]">
+              <div className="flex flex-col gap-1">
+                <div className="flex items-center gap-2 text-outline">
+                  <span className="text-secondary uppercase">[SUCCESS]</span>
+                  <span>Network handshake complete.</span>
                 </div>
-            </div>
-            {help && (<Modal setShowHelp={setHelp} />)}
-        </div >
-    );
-};
+                <div className="text-outline">Ready for user input...</div>
+              </div>
 
-export default About;
+              {/* Prompt Sequence */}
+              <div className="flex flex-col gap-6 mt-4">
+                {/* Name Prompt */}
+                <div className="flex flex-col gap-2">
+                  <label className="text-primary font-bold uppercase">ENTER_NAME:</label>
+                  <div className="flex items-center gap-2 bg-surface-container-lowest p-3 border-b border-outline-variant/30 group">
+                    <span className="text-primary">&gt;</span>
+                    <input className="bg-transparent border-none focus:ring-0 p-0 w-full text-on-surface placeholder:text-outline-variant font-mono" placeholder="Type name..." type="text"/>
+                  </div>
+                </div>
+                {/* Email Prompt */}
+                <div className="flex flex-col gap-2">
+                  <label className="text-primary font-bold uppercase">ENTER_EMAIL:</label>
+                  <div className="flex items-center gap-2 bg-surface-container-lowest p-3 border-b border-outline-variant/30">
+                    <span className="text-primary">&gt;</span>
+                    <input className="bg-transparent border-none focus:ring-0 p-0 w-full text-on-surface placeholder:text-outline-variant font-mono" placeholder="user@monolith.os" type="email"/>
+                  </div>
+                </div>
+                {/* Message Prompt */}
+                <div className="flex flex-col gap-2">
+                  <label className="text-primary font-bold uppercase">TYPE_MESSAGE:</label>
+                  <div className="flex flex-start gap-2 bg-surface-container-lowest p-3 border-b border-outline-variant/30 min-h-[120px]">
+                    <span className="text-primary mt-1">&gt;</span>
+                    <textarea className="bg-transparent border-none focus:ring-0 p-0 w-full text-on-surface placeholder:text-outline-variant font-mono resize-none" placeholder="Enter transmission data..."></textarea>
+                  </div>
+                </div>
+                <div className="flex items-center gap-4 mt-4">
+                  <button className="bg-primary-container text-on-primary-container font-mono px-6 py-2 rounded-lg font-bold tracking-tight hover:shadow-[0_0_20px_rgba(171,199,255,0.2)] transition-all scale-98-active uppercase flex items-center gap-2">
+                    <span>Execute_Send</span>
+                    <span className="material-symbols-outlined text-sm">send</span>
+                  </button>
+                  <div className="flex items-center gap-2 text-outline font-mono text-[10px]">
+                    <span className="cursor-blink">_</span>
+                    <span>AWAITING_COMMAND</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Sidebar Info / System Shortcuts */}
+        <aside className="lg:col-span-4 flex flex-col gap-8">
+          {/* System Shortcuts Card */}
+          <div className="bg-surface-container-low p-6 rounded-xl border border-outline-variant/10">
+            <h3 className="font-mono text-xs font-bold text-outline uppercase mb-6 flex items-center gap-2">
+              <span className="material-symbols-outlined text-sm">terminal</span>
+              System_Shortcuts
+            </h3>
+            <div className="flex flex-col gap-4">
+              <Link href="https://github.com/primotionstudio" target="_blank" className="group flex items-center justify-between p-4 bg-surface-container-lowest hover:bg-primary/5 transition-colors border border-outline-variant/5 rounded-lg">
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded bg-surface-container-high flex items-center justify-center text-primary">
+                    <span className="material-symbols-outlined text-base">code</span>
+                  </div>
+                  <div>
+                    <p className="font-headline font-bold text-sm tracking-tight text-on-surface">GITHUB</p>
+                    <p className="font-mono text-[10px] text-outline">/repos/archive</p>
+                  </div>
+                </div>
+                <span className="material-symbols-outlined text-outline group-hover:text-primary transition-colors">arrow_outward</span>
+              </Link>
+              <Link href="https://linkedin.com/in/theprimotionstudio" target="_blank" className="group flex items-center justify-between p-4 bg-surface-container-lowest hover:bg-primary/5 transition-colors border border-outline-variant/5 rounded-lg">
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded bg-surface-container-high flex items-center justify-center text-primary">
+                    <span className="material-symbols-outlined text-base">link</span>
+                  </div>
+                  <div>
+                    <p className="font-headline font-bold text-sm tracking-tight text-on-surface">LINKEDIN</p>
+                    <p className="font-mono text-[10px] text-outline">/in/system-architect</p>
+                  </div>
+                </div>
+                <span className="material-symbols-outlined text-outline group-hover:text-primary transition-colors">arrow_outward</span>
+              </Link>
+              <Link href="mailto:oyedelenewton@gmail.com" className="group flex items-center justify-between p-4 bg-surface-container-lowest hover:bg-primary/5 transition-colors border border-outline-variant/5 rounded-lg">
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded bg-surface-container-high flex items-center justify-center text-primary">
+                    <span className="material-symbols-outlined text-base">mail</span>
+                  </div>
+                  <div>
+                    <p className="font-headline font-bold text-sm tracking-tight text-on-surface">EMAIL</p>
+                    <p className="font-mono text-[10px] text-outline">/new_message</p>
+                  </div>
+                </div>
+                <span className="material-symbols-outlined text-outline group-hover:text-primary transition-colors">arrow_outward</span>
+              </Link>
+            </div>
+          </div>
+
+          {/* Identity Verification */}
+          <div className="bg-surface-container-low p-6 rounded-xl border border-outline-variant/10">
+            <h3 className="font-mono text-xs font-bold text-outline uppercase mb-4 flex items-center gap-2">
+              <span className="material-symbols-outlined text-sm">verified_user</span>
+              Security_Protocol
+            </h3>
+            <div className="flex flex-col gap-3">
+              <div className="flex justify-between font-mono text-[10px] uppercase">
+                <span className="text-outline">Status:</span>
+                <span className="text-secondary">Verified</span>
+              </div>
+              <div className="flex justify-between font-mono text-[10px] uppercase">
+                <span className="text-outline">Encryption:</span>
+                <span className="text-on-surface uppercase">AES-256</span>
+              </div>
+              <div className="flex justify-between font-mono text-[10px] uppercase">
+                <span className="text-outline">Access_Level:</span>
+                <span className="text-tertiary">Public_Key</span>
+              </div>
+              <div className="mt-4 pt-4 border-t border-outline-variant/10">
+                <img alt="Identity context" className="w-full h-32 object-cover rounded opacity-50 grayscale hover:grayscale-0 transition-all duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDevvAfVibN99DyjDBuUigrYDZHb_ptC2gzyGKp--92njanJzW7vsUF5Qr1mCzfCfqQ8-ngj09xmnO8eq31rkAhc63CinZuIhhbYprFUrvwx_xlpF_0T9_iFrvooc4kbyOuXM94aVYfUlsl6G-_Rvb6-1yx02kiBeH7_pdMU2QMyRP-6mwoszdlfauHpw5l0jD38D_2_H8J14sy_IBOwRcR-8o0R8Fqz2sCuAFZnpXK5YvrAb9To-5-S23vKme00ZlES2XXwxZyJWg"/>
+              </div>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </MonolithLayout>
+  );
+}
