@@ -103,10 +103,10 @@ export const MobileBottomNav = () => {
 
   const navItems = [
     { label: "projects", path: "/projects", icon: "folder" },
-    { label: "experience", path: "/experience", icon: "terminal" },
-    { label: "contact", path: "/contact", icon: "contact_mail", isPrimary: true },
-    { label: "blog", path: "/blog", icon: "description" },
-    { label: "home", path: "/", icon: "person" },
+    { label: "experience", path: "/experience", icon: "description" },
+    { label: "home", path: "/", icon: "person", isPrimary: true },
+    { label: "contact", path: "/contact", icon: "message" },
+    { label: "blog", path: "/blog", icon: "contact_mail" },
   ];
 
   return (
