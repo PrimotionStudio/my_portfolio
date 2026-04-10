@@ -18,8 +18,8 @@ const firaCode = Fira_Code({
 });
 
 export const metadata: Metadata = {
-  title: "MONOLITH_OS // SYSTEM_ARCHITECT",
-  description: "Portfolio of Martins Okanlawon - Software Engineer",
+  title: "THE PRIMOTION STUDIO // SYSTEM_ARCHITECT",
+  description: "Portfolio of Martins (Prime) Okanlawon - Software Engineer",
 };
 
 export default function RootLayout({
@@ -30,7 +30,10 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <head>
-        <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+          rel="stylesheet"
+        />
       </head>
       <body
         className={`${spaceGrotesk.variable} ${inter.variable} ${firaCode.variable} bg-background text-on-surface font-body selection:bg-primary selection:text-on-primary-container antialiased`}
