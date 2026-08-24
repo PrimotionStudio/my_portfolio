@@ -1,8 +1,13 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { MonolithLayout } from "@/components/layout/monolith-layout";
 import Image from "next/image";
+
+type Certificate = {
+  title: string;
+  image: string;
+};
 
 const experiences = [
   {
@@ -46,7 +51,7 @@ const experiences = [
     status: "COMPLETED",
     tech: ["PHP", "WordPress"],
     type: "work",
-    logo: "/webbitskills.jpg",
+    logo: "/webbit.jpg",
   },
   {
     company: "CFSS (Cyber & Forensics Security Solutions)",
@@ -113,6 +118,24 @@ const experiences = [
 ];
 
 export default function Experience() {
+  const [selectedCert, setSelectedCert] = useState<Certificate | null>(null);
+
+  useEffect(() => {
+    if (!selectedCert) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setSelectedCert(null);
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+      document.body.style.overflow = "";
+    };
+  }, [selectedCert]);
+
   return (
     <MonolithLayout>
       <header className="mb-12 max-w-5xl">
@@ -187,9 +210,12 @@ export default function Experience() {
 
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                   {exp.certificates.map((cert, i) => (
-                    <div
+                    <button
                       key={i}
-                      className="border border-outline-variant/20 p-2 bg-background hover:scale-[1.02] transition"
+                      type="button"
+                      onClick={() => setSelectedCert(cert)}
+                      aria-label={`View ${cert.title} fullscreen`}
+                      className="border border-outline-variant/20 p-2 bg-background hover:scale-[1.02] hover:border-secondary/50 transition cursor-pointer text-left focus:outline-none focus-visible:border-secondary"
                     >
                       <Image
                         src={cert.image}
@@ -201,7 +227,7 @@ export default function Experience() {
                       <p className="text-[10px] font-mono mt-2 text-outline uppercase">
                         {cert.title}
                       </p>
-                    </div>
+                    </button>
                   ))}
                 </div>
               </div>
@@ -231,6 +257,44 @@ export default function Experience() {
           </a>
         </div>
       </div>
+
+      {selectedCert && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-label={selectedCert.title}
+          onClick={() => setSelectedCert(null)}
+          className="fixed inset-0 z-50 bg-background/95 backdrop-blur-sm flex flex-col items-center justify-center p-4 sm:p-8 cursor-zoom-out"
+        >
+          <button
+            type="button"
+            onClick={() => setSelectedCert(null)}
+            aria-label="Close certificate viewer"
+            className="absolute top-4 right-4 flex items-center gap-1 font-mono text-[10px] uppercase text-on-surface-variant hover:text-primary border border-outline-variant/30 px-3 py-2 bg-surface-container-low transition-colors cursor-pointer"
+          >
+            Close
+            <span className="material-symbols-outlined text-base">close</span>
+          </button>
+
+          <figure
+            onClick={(e) => e.stopPropagation()}
+            className="relative w-full max-w-5xl h-[80vh] cursor-default"
+          >
+            <Image
+              src={selectedCert.image}
+              alt={selectedCert.title}
+              fill
+              sizes="(max-width: 1024px) 100vw, 1024px"
+              className="object-contain"
+              priority
+            />
+          </figure>
+
+          <p className="mt-4 font-mono text-xs text-secondary uppercase tracking-widest">
+            {selectedCert.title}
+          </p>
+        </div>
+      )}
     </MonolithLayout>
   );
 }
