@@ -143,8 +143,15 @@ export const Footer = () => {
         <span className="opacity-60 hidden md:inline">UPTIME: 99.9%</span>
         <span className="opacity-60 hidden md:inline">LATENCY: 24ms</span>
       </div>
-      <div className="flex gap-4">
-        <span className="hover:text-[#ffba3f] transition-colors cursor-default">STABLE_BUILD</span>
+      <div className="flex items-center gap-3 md:gap-4">
+        <span className="hover:text-[#ffba3f] transition-colors cursor-default hidden xs:inline">STABLE_BUILD</span>
+        <span className="text-[#abc7ff]/30 hidden xs:inline">|</span>
+        <Link href="/terms" className="text-[#abc7ff]/70 hover:text-[#ecffe3] transition-colors">
+          [TERMS]
+        </Link>
+        <Link href="/privacy" className="text-[#abc7ff]/70 hover:text-[#ecffe3] transition-colors">
+          [PRIVACY]
+        </Link>
       </div>
     </footer>
   );
