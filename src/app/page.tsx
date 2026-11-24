@@ -1,134 +1,209 @@
-"use client";
-
-import React from "react";
-import { MonolithLayout } from "@/components/layout/monolith-layout";
+import { readdirSync } from "node:fs";
+import path from "node:path";
 import Link from "next/link";
-import { GitHubCalendar } from "react-github-calendar";
+import {
+  ArrowRight,
+  Code2,
+  Crosshair,
+  Crown,
+  Globe,
+  Mail,
+  Terminal,
+  Video,
+  Waves,
+  Workflow,
+  type LucideIcon,
+} from "lucide-react";
+import { PortraitCarousel } from "@/components/PortraitCarousel";
+import { Prose, SectionTitle } from "@/components/Paper";
+import { ABOUT_ME, OWNER, PRINCIPLES, SERVICES, SUMMARY } from "@/lib/site";
 
-export default function Home() {
+const IMAGE_FILE = /\.(jpe?g|png|webp|avif)$/i;
+
+/** Every photo dropped into public/portraits joins the carousel, in file-name order. */
+function getPortraits() {
+  const dir = path.join(process.cwd(), "public", "portraits");
+  return readdirSync(dir)
+    .filter((f) => IMAGE_FILE.test(f))
+    .sort()
+    .map((f) => `/portraits/${f}`);
+}
+
+const SERVICE_ICONS: Record<(typeof SERVICES)[number]["key"], LucideIcon> = {
+  web: Globe,
+  systems: Workflow,
+  email: Mail,
+  video: Video,
+};
+
+const ABOUT_ICONS: Record<(typeof ABOUT_ME)[number]["key"], LucideIcon> = {
+  chess: Crown,
+  cod: Crosshair,
+  swim: Waves,
+  terminal: Terminal,
+  linux: Code2,
+};
+
+export default function Page() {
   return (
-    <MonolithLayout>
-      <section className="max-w-5xl mx-auto space-y-12">
-        <div className="space-y-2">
-          <p className="font-mono text-[10px] text-outline uppercase tracking-[0.2em]">
-            BUILD_VER: 2.1.0 // SESSION_ID: 0x
-            {Math.floor(Math.random() * 65536)
-              .toString(16)
-              .padStart(4, "0")
-              .toUpperCase()}
+    <>
+      {/* ---------------------------------------------------------------- */}
+      {/* Intro                                                            */}
+      {/* ---------------------------------------------------------------- */}
+      <section className="flex flex-col-reverse gap-10 md:flex-row md:items-start md:justify-between">
+        <div className="max-w-xl">
+          <p className="font-hand text-3xl leading-(--line) text-pen">
+            Hi, I&apos;m
           </p>
-          <h1 className="font-headline text-5xl md:text-7xl font-bold tracking-tighter text-primary uppercase">
-            SYSTEM_ARCHITECT
+          <h1 className="font-hand text-6xl leading-[calc(var(--line)*2)] font-bold text-ink sm:text-7xl">
+            {OWNER.name}
           </h1>
-        </div>
-
-        {/* Terminal Interface */}
-        <div className="bg-surface-container-low rounded-lg overflow-hidden border border-outline-variant/20 shadow-2xl">
-          {/* Terminal Header */}
-          <div className="bg-surface-container-high px-4 py-2 flex justify-between items-center">
-            <div className="flex gap-1.5">
-              <div className="w-2.5 h-2.5 rounded-full bg-error/40"></div>
-              <div className="w-2.5 h-2.5 rounded-full bg-tertiary/40"></div>
-              <div className="w-2.5 h-2.5 rounded-full bg-secondary/40"></div>
-            </div>
-            <span className="font-mono text-[10px] text-outline">guest@theprimotionstudio: ~</span>
-          </div>
-          {/* Terminal Content */}
-          <div className="p-6 font-mono text-sm md:text-base space-y-4 leading-relaxed">
-            <div className="flex gap-3">
-              <span className="text-secondary">guest@theprimotionstudio:~$</span>
-              <span className="text-on-surface">whoami</span>
-            </div>
-            <div className="text-on-surface-variant space-y-2">
-              <p className="text-primary font-bold">NAME: MARTINS_OKANLAWON</p>
-              <p>ROLE: FULL_STACK_ENGINEER // ETHICAL_HACKER</p>
-              <p>
-                STACK: <span className="text-tertiary">Next.js</span>,{" "}
-                <span className="text-tertiary">PHP</span>,{" "}
-                <span className="text-tertiary">Python</span>,{" "}
-                <span className="text-tertiary">PostgreSQL</span>
-              </p>
-              <p className="opacity-80">
-                Highly motivated and versatile programmer with over 5 years of experience in
-                full-stack development. Proficient in PHP, JavaScript/Typescript, C, Python, and
-                various scripting languages. Aiming to create solutions, learn from every mistake,
-                and look at the bigger picture in every situation.
-              </p>
-            </div>
-            <div className="pt-6">
-              <p className="text-outline text-xs mb-4 uppercase tracking-widest">
-                Available Commands:
-              </p>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                <Link
-                  href="/projects"
-                  className="group cursor-pointer hover:bg-surface-container-highest p-3 transition-colors border-b border-transparent hover:border-secondary"
-                >
-                  <span className="text-secondary block mb-1">ls projects</span>
-                  <span className="text-xs text-outline italic">View architecture portfolio</span>
-                </Link>
-                <Link
-                  href="/experience"
-                  className="group cursor-pointer hover:bg-surface-container-highest p-3 transition-colors border-b border-transparent hover:border-secondary"
-                >
-                  <span className="text-secondary block mb-1">cd experience</span>
-                  <span className="text-xs text-outline italic">Professional history</span>
-                </Link>
-                <Link
-                  href="/contact"
-                  className="group cursor-pointer hover:bg-surface-container-highest p-3 transition-colors border-b border-transparent hover:border-secondary"
-                >
-                  <span className="text-secondary block mb-1">cat contact.txt</span>
-                  <span className="text-xs text-outline italic">Initialize communication</span>
-                </Link>
-                <Link
-                  href="/blog"
-                  className="group cursor-pointer hover:bg-surface-container-highest p-3 transition-colors border-b border-transparent hover:border-secondary"
-                >
-                  <span className="text-secondary block mb-1">./blog --latest</span>
-                  <span className="text-xs text-outline italic">Technical insights</span>
-                </Link>
-              </div>
-            </div>
-            <div className="flex gap-3 pt-4">
-              <span className="text-secondary">guest@theprimotionstudio:~$</span>
-              <span className="w-2.5 h-5 bg-primary cursor-blink"></span>
-            </div>
+          <p className="text-xl leading-(--line) font-semibold text-ink">
+            {OWNER.role}
+          </p>
+          <p className="text-body leading-(--line) text-ink-soft">
+            I build websites, web apps and systems for businesses and schools. I
+            can also set you up with your own private email and video meetings,
+            so you stop renting them.
+          </p>
+          <p className="text-body leading-(--line) text-ink-soft">
+            My name&apos;s {OWNER.legalName}, but most people call me{" "}
+            <span className="font-semibold text-ink">{OWNER.nickname}</span>.
+            Martins is fine too, though I&apos;d love it if you went with Prime,
+            Prime Okanlawon or Mr. Okanlawon.
+          </p>
+          <div className="mt-[var(--line)] flex flex-wrap gap-3">
+            <Link
+              href="/contact"
+              className="inline-flex min-h-12 items-center gap-2 rounded-lg bg-pen px-5 text-body font-semibold text-white shadow-sm transition hover:bg-ink"
+            >
+              Let&apos;s work together
+              <ArrowRight className="size-4" aria-hidden />
+            </Link>
+            <Link
+              href="/projects"
+              className="inline-flex min-h-12 items-center gap-2 rounded-lg border-2 border-pen/30 bg-paper px-5 text-body font-semibold text-pen transition hover:border-pen"
+            >
+              See what I&apos;ve built
+            </Link>
           </div>
         </div>
-
-        {/* Bento Stats / Features */}
-        <GitHubCalendar username="primotionstudio" />
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <img
-            src="https://streak-stats.demolab.com?user=PrimotionStudio&amp;theme=dark"
-            className="w-full md:col-span-2"
-          />
-
-          <div className="bg-primary-container p-8 text-on-primary-container relative overflow-hidden group">
-            <div className="relative z-10">
-              <div className="flex justify-between">
-                <span className="font-mono text-[10px] uppercase tracking-widest mb-2 block opacity-70">
-                  CURRENT_STATUS
-                </span>
-                <img src="https://komarev.com/ghpvc/?username=PrimotionStudio" />
-              </div>
-              <h3 className="font-headline text-2xl font-bold leading-tight uppercase">
-                Open for Collaboration
-              </h3>
-              <p className="mt-4 text-sm opacity-80 font-medium">
-                Seeking high-impact backend roles or complex full-stack contracts.
-              </p>
-              <button className="mt-8 px-4 py-2 bg-on-primary-container text-white text-xs font-mono uppercase tracking-widest hover:opacity-90 transition-opacity">
-                <Link href="/contact">SEND_SIGNAL</Link>
-              </button>
-            </div>
-            <div className="absolute -right-4 -bottom-4 opacity-10">
-              <span className="material-symbols-outlined text-9xl">terminal</span>
-            </div>
-          </div>
+        <div className="self-center md:self-start md:pt-2">
+          <PortraitCarousel images={getPortraits()} name={OWNER.nickname} />
         </div>
       </section>
-    </MonolithLayout>
+
+      {/* ---------------------------------------------------------------- */}
+      {/* Professional summary                                             */}
+      {/* ---------------------------------------------------------------- */}
+      <SectionTitle>What I do</SectionTitle>
+      <Prose>
+        {SUMMARY.map((p) => (
+          <p key={p}>{p}</p>
+        ))}
+      </Prose>
+
+      {/* ---------------------------------------------------------------- */}
+      {/* Simple is best                                                   */}
+      {/* ---------------------------------------------------------------- */}
+      <SectionTitle>
+        My one rule:{" "}
+        <span className="marker text-ink uppercase">simple is best</span>
+      </SectionTitle>
+      <Prose>
+        <p className="text-body">
+          This goes for everything I make, from the screens people tap on to the
+          code behind them. If there&apos;s a simpler way that works, I pick it.
+          Simple stuff is easier to use, cheaper to run and a lot harder to
+          break.
+        </p>
+      </Prose>
+      <ol className="mt-[var(--line)] grid max-w-3xl gap-x-10 sm:grid-cols-2">
+        {PRINCIPLES.map((p, i) => (
+          <li key={p.title} className="flex gap-3 pb-[var(--line)]">
+            <span className="font-hand text-3xl leading-(--line) font-bold text-pen">
+              {i + 1}.
+            </span>
+            <div>
+              <h3 className="text-body leading-(--line) font-semibold text-ink">
+                {p.title}
+              </h3>
+              <p className="text-body leading-(--line) text-ink-soft">
+                {p.body}
+              </p>
+            </div>
+          </li>
+        ))}
+      </ol>
+
+      {/* ---------------------------------------------------------------- */}
+      {/* Services                                                         */}
+      {/* ---------------------------------------------------------------- */}
+      <SectionTitle className="mt-[var(--line)]">How I can help</SectionTitle>
+      <ul className="grid max-w-4xl gap-5 sm:grid-cols-2">
+        {SERVICES.map((s) => {
+          const Icon = SERVICE_ICONS[s.key];
+          return (
+            <li
+              key={s.key}
+              className="rounded-xl border border-rule bg-paper/90 p-5 shadow-sm"
+            >
+              <div className="flex items-center gap-3">
+                <span className="grid size-(--line) shrink-0 place-items-center rounded-lg bg-pen-soft text-pen">
+                  <Icon className="size-5" aria-hidden />
+                </span>
+                <h3 className="text-xl leading-(--line) font-semibold text-ink">
+                  {s.title}
+                </h3>
+              </div>
+              <p className="mt-2 text-body leading-(--line) text-ink-soft">
+                {s.body}
+              </p>
+            </li>
+          );
+        })}
+      </ul>
+      <div className="mt-[var(--line)] max-w-4xl rounded-xl border-2 border-dashed border-pen/40 bg-pen-soft/60 p-5">
+        <p className="font-hand text-3xl leading-(--line) font-bold text-ink">
+          Sound like what you need?
+        </p>
+        <p className="mt-1 text-body leading-(--line) text-ink-soft">
+          Drop me a few lines about it. I&apos;ll get back to you with a simple
+          plan and an honest idea of what it&apos;ll take.
+        </p>
+        <Link
+          href="/contact"
+          className="mt-3 inline-flex min-h-12 items-center gap-2 rounded-lg bg-pen px-5 font-semibold text-white transition hover:bg-ink"
+        >
+          Say hello
+          <ArrowRight className="size-4" aria-hidden />
+        </Link>
+      </div>
+
+      {/* ---------------------------------------------------------------- */}
+      {/* About me                                                         */}
+      {/* ---------------------------------------------------------------- */}
+      <SectionTitle>A bit about me</SectionTitle>
+      <Prose>
+        <p>When I&apos;m not working, this is usually what I&apos;m up to.</p>
+      </Prose>
+      <ul className="mt-[var(--line)] max-w-2xl">
+        {ABOUT_ME.map((a) => {
+          const Icon = ABOUT_ICONS[a.key];
+          return (
+            <li key={a.key} className="flex gap-3">
+              <Icon className="mt-2 size-5 shrink-0 text-pen" aria-hidden />
+              <p className="text-body leading-(--line)">
+                <span className="font-semibold text-ink">{a.title}.</span>{" "}
+                <span className="text-ink-soft">{a.body}</span>
+              </p>
+            </li>
+          );
+        })}
+      </ul>
+      <p className="mt-[calc(var(--line)*2)] font-hand text-3xl leading-(--line) text-pen">
+        Thanks for stopping by! ~ Prime
+      </p>
+    </>
   );
 }
