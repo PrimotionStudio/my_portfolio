@@ -1,300 +1,177 @@
-"use client";
-
-import React, { useEffect, useState } from "react";
-import { MonolithLayout } from "@/components/layout/monolith-layout";
+import type { Metadata } from "next";
 import Image from "next/image";
+import { Download, ExternalLink, GraduationCap } from "lucide-react";
+import { InkTag, PageTitle, SectionTitle } from "@/components/Paper";
+import {
+  CERTIFICATES,
+  EDUCATION,
+  EXPERIENCE,
+  OWNER,
+  SKILLS,
+  VOLUNTEERING,
+} from "@/lib/site";
 
-type Certificate = {
-  title: string;
-  image: string;
-};
+export const metadata: Metadata = { title: "Experience" };
 
-const experiences = [
-  {
-    company: "The Primotion Team",
-    role: "Founder",
-    period: "Dec 2024 – Present",
-    description:
-      "Leading a startup venture, managing early-stage operations, remote team coordination, and product direction.",
-    status: "ACTIVE",
-    tech: ["Startup", "Leadership", "Remote Ops"],
-    type: "leadership",
-    logo: "/primotionteam.jpg",
-  },
-  {
-    company: "The Primotion Studio",
-    role: "Project Lead Developer",
-    period: "2019 – Present",
-    description:
-      "Leading development projects across Node.js, Python, and 14+ technologies. Architecting scalable systems and mentoring developers.",
-    status: "ACTIVE",
-    tech: ["Node.js", "Python", "Architecture"],
-    type: "leadership",
-    logo: "/theprimotionstudio.jpg",
-  },
-  {
-    company: "Z1 Technology",
-    role: "Chief Technology Officer",
-    period: "Feb 2025 – Sep 2025",
-    description:
-      "Oversaw server infrastructure, backend systems, and technical strategy for a Nigerian LMS platform.",
-    status: "COMPLETED",
-    tech: ["Server Admin", "Backend", "Strategy"],
-    type: "leadership",
-    logo: "/z1lms.jpg",
-  },
-  {
-    company: "WEBBITSKILLS",
-    role: "Backend & Full Stack Developer",
-    period: "Jan 2025 – Feb 2025",
-    description: "Worked with PHP and WordPress to deliver backend solutions and web systems.",
-    status: "COMPLETED",
-    tech: ["PHP", "WordPress"],
-    type: "work",
-    logo: "/webbit.jpg",
-  },
-  {
-    company: "CFSS (Cyber & Forensics Security Solutions)",
-    role: "Project Intern",
-    period: "Dec 2023 – Apr 2024",
-    description:
-      "Worked on cryptography and public key systems, gaining hands-on cybersecurity experience.",
-    status: "COMPLETED",
-    tech: ["Cryptography", "Security"],
-    type: "internship",
-    certificates: [
-      {
-        title: "Certificate of Internship",
-        image: "/cfss-cert-1.png",
-      },
-      {
-        title: "Certificate of Internship",
-        image: "/cfss-cert-2.png",
-      },
-    ],
-    logo: "/cfss.jpg",
-  },
-  {
-    company: "FinaSeed Limited",
-    role: "Software Developer Intern",
-    period: "Aug 2023 – Jan 2024",
-    description: "Worked on backend systems, databases, and API testing.",
-    status: "COMPLETED",
-    tech: ["Backend", "Databases", "API Testing"],
-    type: "internship",
-    logo: "/finaseed.jpg",
-  },
-  {
-    company: "Harvoxx Tech Hub",
-    role: "Intern",
-    period: "Jul 2023 – Jan 2024",
-    description:
-      "Built frontend skills including responsive web design, CSS, and modern UI development.",
-    status: "COMPLETED",
-    tech: ["HTML", "CSS", "Responsive Design"],
-    type: "internship",
-    logo: "/harvoxx.jpg",
-  },
-  {
-    company: "ALX Africa",
-    role: "Software Engineering Student",
-    period: "Aug 2023 – Present",
-    description: "Learning software engineering, data structures, and backend development.",
-    status: "ACTIVE",
-    tech: ["Python", "Data Structures"],
-    type: "education",
-    certificates: [
-      {
-        title: "ALX Software Engineering Certificate",
-        image: "/alx-cert-1.png",
-      },
-      {
-        title: "ALX AICE Certificate",
-        image: "/alx-cert-2.png",
-      },
-    ],
-    logo: "/alx.jpg",
-  },
-];
+export default function Page() {
+  return (
+    <>
+      <PageTitle
+        title="Experience"
+        description="Where I've worked and what I got up to there. The short version: lots of building, plus looking after the servers."
+      />
+      <a
+        href={OWNER.cv}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="inline-flex min-h-12 items-center gap-2 rounded-lg border-2 border-pen/30 bg-paper px-5 font-semibold text-pen transition hover:border-pen"
+      >
+        <Download className="size-4" aria-hidden />
+        Grab my CV (PDF)
+      </a>
 
-export default function Experience() {
-  const [selectedCert, setSelectedCert] = useState<Certificate | null>(null);
+      <SectionTitle>Jobs</SectionTitle>
+      <ol className="relative max-w-3xl border-l-2 border-pen/25 pl-6">
+        {EXPERIENCE.map((job) => (
+          <li
+            key={`${job.org}-${job.role}`}
+            className="relative pb-[var(--line)]"
+          >
+            <span
+              aria-hidden
+              className={`absolute top-7 -left-[33px] size-4 rounded-full border-2 border-pen ${job.current ? "bg-pen" : "bg-paper"}`}
+            />
+            <div className="flex flex-col sm:flex-row sm:gap-5">
+              <OrgLogo
+                org={job.org}
+                logo={"logo" in job ? job.logo : undefined}
+              />
+              <div className="min-w-0">
+                <h3 className="flex flex-wrap items-center gap-x-3 text-xl leading-(--line) font-semibold text-ink">
+                  {job.role}
+                  {job.current && <InkTag>Current</InkTag>}
+                </h3>
+                <p className="flex flex-wrap items-center gap-x-2 text-body leading-(--line) text-ink-soft">
+                  <span className="font-medium text-pen">{job.org}</span>
+                  <span aria-hidden>·</span>
+                  <span>{job.period}</span>
+                </p>
+                <ul className="list-disc pl-5 text-body leading-(--line) text-ink-soft marker:text-pen/60">
+                  {job.points.map((pt) => (
+                    <li key={pt}>{pt}</li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </li>
+        ))}
+      </ol>
 
-  useEffect(() => {
-    if (!selectedCert) return;
+      <SectionTitle>Giving back</SectionTitle>
+      <ul className="max-w-3xl space-y-[var(--line)]">
+        {VOLUNTEERING.map((v) => (
+          <li key={v.org}>
+            <h3 className="text-xl leading-(--line) font-semibold text-ink">
+              {v.role}
+            </h3>
+            <p className="text-body leading-(--line)">
+              <span className="font-medium text-pen">{v.org}</span>
+              <span className="text-ink-soft"> · {v.period}</span>
+            </p>
+            <p className="text-body leading-(--line) text-ink-soft">{v.body}</p>
+          </li>
+        ))}
+      </ul>
 
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setSelectedCert(null);
-    };
+      <SectionTitle>Education</SectionTitle>
+      <div className="flex max-w-3xl gap-3">
+        <GraduationCap
+          className="mt-1.5 size-6 shrink-0 text-pen"
+          aria-hidden
+        />
+        <div className="text-body leading-(--line)">
+          <h3 className="text-xl font-semibold text-ink">{EDUCATION.degree}</h3>
+          <p>
+            <span className="font-medium text-pen">{EDUCATION.school}</span>
+            <span className="text-ink-soft"> · {EDUCATION.period}</span>
+          </p>
+          <p className="text-ink-soft">{EDUCATION.note}</p>
+        </div>
+      </div>
 
-    window.addEventListener("keydown", handleKeyDown);
-    document.body.style.overflow = "hidden";
+      <SectionTitle>Certificates</SectionTitle>
+      <ul className="grid max-w-4xl gap-6 sm:grid-cols-2">
+        {CERTIFICATES.map((c) => (
+          <li key={c.image}>
+            <a
+              href={c.image}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group block bg-white p-2 shadow-[0_6px_16px_rgb(40_25_10/0.16)] transition hover:-translate-y-0.5"
+            >
+              <div className="relative aspect-[1.414] overflow-hidden">
+                <Image
+                  src={c.image}
+                  alt={`${c.title} certificate from ${c.issuer}`}
+                  fill
+                  sizes="(min-width: 640px) 400px, 90vw"
+                  className="object-contain"
+                />
+              </div>
+            </a>
+            <p className="mt-2 text-body leading-(--line) font-semibold text-ink">
+              {c.title}
+            </p>
+            <p className="flex items-center gap-2 text-body leading-(--line) text-ink-soft">
+              {c.issuer} · {c.period}
+              <ExternalLink className="size-3.5" aria-label="Opens full size" />
+            </p>
+          </li>
+        ))}
+      </ul>
 
-    return () => {
-      window.removeEventListener("keydown", handleKeyDown);
-      document.body.style.overflow = "";
-    };
-  }, [selectedCert]);
+      <SectionTitle>Things I work with</SectionTitle>
+      <ul className="flex max-w-3xl flex-wrap gap-2">
+        {SKILLS.map((s) => (
+          <li
+            key={s}
+            className="off-lines rounded-md border border-rule bg-paper px-3 text-body leading-(--line) text-ink"
+          >
+            {s}
+          </li>
+        ))}
+      </ul>
+    </>
+  );
+}
+
+/** A company's logo on a white tile, two ruled lines tall; initials when there's no logo. */
+function OrgLogo({ org, logo }: { org: string; logo?: string }) {
+  const initials = org
+    .split(/\s+/)
+    .filter((w) => /^[A-Z]/.test(w) && w !== "The")
+    .slice(0, 2)
+    .map((w) => w[0])
+    .join("");
 
   return (
-    <MonolithLayout>
-      <header className="mb-12 max-w-5xl">
-        <div className="flex items-center gap-3 mb-2">
-          <span className="font-mono text-[10px] text-tertiary uppercase tracking-[0.2em]">
-            BUILD_VER: 2.1.0 // MODULE: EXPERIENCE_CHRONICLE
-          </span>
-          <span className="h-px flex-1 bg-outline-variant opacity-15"></span>
-        </div>
-        <h1 className="text-5xl md:text-6xl font-headline font-bold text-primary tracking-tighter uppercase mb-4">
-          Professional History
-        </h1>
-        <p className="font-mono text-sm text-on-surface-variant max-w-2xl">
-          Retrieved from <span className="text-secondary">/var/log/career.log</span>. Chronicling
-          professional milestones and technical contributions across distributed environments.
-        </p>
-      </header>
-
-      <div className="space-y-8 max-w-4xl">
-        {experiences.map((exp, index) => (
-          <div
-            key={index}
-            className="group relative bg-surface-container-low p-6 border-l-2 border-transparent hover:border-secondary transition-all"
-          >
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 gap-2">
-              <div className="flex items-center gap-3">
-                {exp.logo && (
-                  <Image
-                    src={exp.logo}
-                    alt={exp.company}
-                    width={40}
-                    height={40}
-                    className="rounded-sm object-contain"
-                  />
-                )}
-
-                <div>
-                  <h3 className="text-2xl font-headline font-bold text-on-surface uppercase">
-                    {exp.company}
-                  </h3>
-                  <p className="text-sm text-primary font-mono">{exp.role}</p>
-                </div>
-              </div>
-              <div className="text-right flex flex-col items-end gap-1">
-                <span className="font-mono text-[10px] text-outline">{exp.period}</span>
-
-                <span className="font-mono text-[10px] text-secondary uppercase">{exp.status}</span>
-
-                {exp.type && (
-                  <span className="font-mono text-[10px] text-accent uppercase border border-outline-variant/30 px-2 py-[2px]">
-                    {exp.type}
-                  </span>
-                )}
-              </div>
-            </div>
-            <p className="text-sm text-on-surface-variant mb-6 font-body leading-relaxed">
-              {exp.description}
-            </p>
-            <div className="flex flex-wrap gap-2">
-              {exp.tech.map((t) => (
-                <span
-                  key={t}
-                  className="font-mono text-[10px] px-2 py-1 bg-background border border-outline-variant/30 text-outline group-hover:text-primary transition-colors uppercase"
-                >
-                  {t}
-                </span>
-              ))}
-            </div>
-            {exp.certificates && (
-              <div className="mt-6">
-                <p className="font-mono text-xs text-secondary mb-3 uppercase">Certificates</p>
-
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                  {exp.certificates.map((cert, i) => (
-                    <button
-                      key={i}
-                      type="button"
-                      onClick={() => setSelectedCert(cert)}
-                      aria-label={`View ${cert.title} fullscreen`}
-                      className="border border-outline-variant/20 p-2 bg-background hover:scale-[1.02] hover:border-secondary/50 transition cursor-pointer text-left focus:outline-none focus-visible:border-secondary"
-                    >
-                      <Image
-                        src={cert.image}
-                        alt={cert.title}
-                        width={300}
-                        height={200}
-                        className="object-cover w-full h-auto"
-                      />
-                      <p className="text-[10px] font-mono mt-2 text-outline uppercase">
-                        {cert.title}
-                      </p>
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
-          </div>
-        ))}
-      </div>
-
-      <div className="mt-12 pt-8 border-t border-outline-variant/15">
-        <div className="bg-surface-container-low p-6 rounded-lg border border-outline-variant/10 max-w-2xl">
-          <h3 className="font-headline font-bold text-on-surface uppercase mb-4 flex items-center gap-2">
-            <span className="material-symbols-outlined text-primary">description</span>
-            RESUME_DOWNLOAD
-          </h3>
-          <p className="text-sm text-on-surface-variant mb-6 font-body">
-            Access the complete dossier in PDF format for offline synchronization.
-          </p>
-          <a
-            href="/mycv.pdf"
-            target="_blank"
-            rel="noopener noreferrer"
-            download="Martins Okanlawon CV.pdf"
-            className="inline-flex items-center gap-2 bg-primary-container text-on-primary-container px-4 py-2 font-mono text-xs font-bold uppercase hover:shadow-[0_0_15px_rgba(171,199,255,0.2)] transition-all"
-          >
-            Execute_Download
-            <span className="material-symbols-outlined text-sm">download</span>
-          </a>
-        </div>
-      </div>
-
-      {selectedCert && (
-        <div
-          role="dialog"
-          aria-modal="true"
-          aria-label={selectedCert.title}
-          onClick={() => setSelectedCert(null)}
-          className="fixed inset-0 z-50 bg-background/95 backdrop-blur-sm flex flex-col items-center justify-center p-4 sm:p-8 cursor-zoom-out"
+    <div className="grid size-[calc(var(--line)*2)] shrink-0 place-items-center overflow-hidden rounded-xl bg-white p-1.5 shadow-[0_2px_8px_rgb(40_25_10/0.15)] ring-1 ring-rule">
+      {logo ? (
+        <Image
+          src={logo}
+          alt={`${org} logo`}
+          width={128}
+          height={128}
+          className="size-full rounded-lg object-contain"
+        />
+      ) : (
+        <span
+          aria-label={`${org} logo`}
+          className="font-hand text-4xl font-bold text-pen"
         >
-          <button
-            type="button"
-            onClick={() => setSelectedCert(null)}
-            aria-label="Close certificate viewer"
-            className="absolute top-4 right-4 flex items-center gap-1 font-mono text-[10px] uppercase text-on-surface-variant hover:text-primary border border-outline-variant/30 px-3 py-2 bg-surface-container-low transition-colors cursor-pointer"
-          >
-            Close
-            <span className="material-symbols-outlined text-base">close</span>
-          </button>
-
-          <figure
-            onClick={(e) => e.stopPropagation()}
-            className="relative w-full max-w-5xl h-[80vh] cursor-default"
-          >
-            <Image
-              src={selectedCert.image}
-              alt={selectedCert.title}
-              fill
-              sizes="(max-width: 1024px) 100vw, 1024px"
-              className="object-contain"
-              priority
-            />
-          </figure>
-
-          <p className="mt-4 font-mono text-xs text-secondary uppercase tracking-widest">
-            {selectedCert.title}
-          </p>
-        </div>
+          {initials}
+        </span>
       )}
-    </MonolithLayout>
+    </div>
   );
 }
